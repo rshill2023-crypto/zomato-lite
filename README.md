@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zomato Lite
 
-## Getting Started
+A tiny restaurant-review app built to learn how a real product fits together:
+two screens, two APIs, two database tables, one live URL.
 
-First, run the development server:
+- **Live:** https://zomato-lite-topaz-three.vercel.app
+- Restaurant page: `/restaurant/1` — computed rating, latest review featured
+- Write a review: `/review/1`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## The one big idea
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Store facts, compute answers.**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+There is no `average_rating` column and no `latest_review` column. Ratings are
+facts — "Priya gave 4 stars on 14 August" — and they are stored forever. The
+average is computed fresh from `AVG(rating)` the moment somebody opens the
+page. If the average were stored, every new review would need extra work and,
+one forgetful day, the app would lie.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The layers
 
-## Learn More
+| Layer | Files |
+| --- | --- |
+| Frontend (renders, never computes) | `app/page.tsx`, `app/restaurant/[id]/page.tsx`, `app/review/[restaurantId]/page.tsx` |
+| Backend (validation, raw SQL, no ORM) | `app/api/reviews/route.ts`, `app/api/restaurants/[id]/route.ts` |
+| Database (facts only) | `db/schema.sql`, `db/setup.mjs` → `npm run db:setup` |
+| Config/secrets | `.env.local` (git-ignored — it is never committed) |
+| Deployment | GitHub + Vercel (pushes from `main` go live automatically) |
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Stack: Next.js 15 (App Router, TypeScript), Tailwind CSS, Neon Postgres via
+`@neondatabase/serverless`, raw SQL only.
