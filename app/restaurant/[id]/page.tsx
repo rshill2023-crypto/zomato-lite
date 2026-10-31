@@ -7,6 +7,7 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 type Review = { id: number; rating: number; comment: string; createdAt: string };
 type Data = {
@@ -62,6 +63,16 @@ export default function RestaurantPage({ params }: { params: Promise<{ id: strin
       <p className="mt-1 text-sm text-neutral-500">
         {data.cuisine} · {data.area}
       </p>
+
+      {/* --- the food, quietly --- */}
+      <Image
+        src="/burrito.jpg"
+        alt="A Ludhiana-style burrito, sliced open, with lime"
+        width={1000}
+        height={562}
+        priority
+        className="mt-6 h-44 w-full rounded-xl object-cover"
+      />
 
       {/* --- the average: received from the backend, printed as-is --- */}
       <div className="mt-10 flex items-baseline gap-3">

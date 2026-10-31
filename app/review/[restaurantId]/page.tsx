@@ -7,6 +7,7 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type Restaurant = { name: string };
 
@@ -58,9 +59,19 @@ export default function ReviewPage({ params }: { params: Promise<{ restaurantId:
   return (
     <div className="mx-auto flex min-h-screen max-w-[560px] flex-col px-6 py-16">
       <p className="text-sm text-neutral-500">Write a review</p>
-      <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-        {name ?? (name === null ? "…" : "Restaurant not found")}
-      </h1>
+      <div className="mt-1 flex items-center gap-3">
+        <Image
+          src="/burrito.jpg"
+          alt=""
+          width={56}
+          height={56}
+          priority
+          className="h-9 w-9 rounded-lg object-cover"
+        />
+        <h1 className="text-xl font-semibold tracking-tight">
+          {name ?? (name === null ? "…" : "Restaurant not found")}
+        </h1>
+      </div>
 
       <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-10">
         <div>
